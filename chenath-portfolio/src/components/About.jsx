@@ -48,7 +48,7 @@ export default function About() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5 }}
             className="flex items-center justify-center gap-2 text-red-400 text-sm md:text-base font-bold tracking-widest uppercase mb-3"
           >
@@ -60,7 +60,7 @@ export default function About() {
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl md:text-6xl font-extrabold text-white tracking-tight"
           >
@@ -70,7 +70,7 @@ export default function About() {
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-slate-300 text-base md:text-lg mt-4 font-normal"
           >
@@ -86,7 +86,7 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5 }}
               className="w-full aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-[24px] overflow-hidden border border-slate-600/50 bg-[#1a2438] p-3 shadow-2xl"
             >
@@ -104,7 +104,7 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5, delay: 0.1 }}
               className="bg-[#162035]/80 backdrop-blur-md border border-slate-600/50 p-6 rounded-[22px] shadow-lg"
             >
@@ -134,7 +134,7 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5 }}
               className="space-y-5 text-slate-300 text-base md:text-lg leading-relaxed font-normal"
             >
@@ -169,7 +169,7 @@ export default function About() {
                   key={i}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                   className="bg-[#162035]/70 border border-slate-600/50 p-6 rounded-[18px] hover:border-red-700/50 hover:bg-[#1c2a42]/70 transition-all duration-300 group"
                 >
@@ -191,7 +191,7 @@ export default function About() {
                   key={i}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                   className="bg-[#162035]/60 border border-slate-600/40 p-5 rounded-[18px] text-center flex flex-col justify-center items-center shadow-sm"
                 >

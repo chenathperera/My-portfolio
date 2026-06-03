@@ -2,37 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
 
+const SECTION_IDS = ['home', 'about', 'projects', 'education', 'contact'];
+
 export default function Navbar() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeSection, setActiveSection] = useState('home');
 
-  const tabs = ['home', 'about', 'projects', 'education', 'contact'];
-
-  // Track which section is in view
   useEffect(() => {
-    const observers = [];
+    const visibility = new Map();
 
-    tabs.forEach((tab) => {
-      const el = document.getElementById(tab);
-      if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          visibility.set(entry.target.id, entry.intersectionRatio);
+        });
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveTab(tab);
-        },
-        { threshold: 0.4 }
-      );
-      observer.observe(el);
-      observers.push(observer);
+        let bestSection = null;
+        let bestRatio = 0;
+
+        SECTION_IDS.forEach((id) => {
+          const ratio = visibility.get(id) ?? 0;
+          if (ratio >= 0.5 && ratio > bestRatio) {
+            bestRatio = ratio;
+            bestSection = id;
+          }
+        });
+
+        if (bestSection) {
+          setActiveSection(bestSection);
+        }
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
     });
 
-    return () => observers.forEach((obs) => obs.disconnect());
+    return () => observer.disconnect();
   }, []);
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      setActiveTab(id);
+      setActiveSection(id);
     }
   };
 
@@ -56,16 +70,15 @@ export default function Navbar() {
         transition={{ duration: 0.5, delay: 0.1 }}
         className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-400"
       >
-        {tabs.map((tab) => (
+        {SECTION_IDS.map((tab) => (
           <button
             key={tab}
             onClick={() => scrollToSection(tab)}
-            className={`capitalize px-4 py-1.5 rounded-lg cursor-pointer transition-all duration-300 font-medium
-              ${
-                activeTab === tab
-                  ? 'bg-red-600/20 text-red-400 border border-red-600/40'
-                  : 'text-slate-400 hover:text-red-400 border border-transparent hover:border-red-900/30'
-              }`}
+            className={`capitalize cursor-pointer transition-all duration-300 font-medium ${
+              activeSection === tab
+                ? 'bg-red-600/20 text-red-400 border border-red-500/30 px-4 py-1.5 rounded-lg'
+                : 'text-slate-400 hover:text-red-400 border border-transparent hover:border-red-900/30 px-4 py-1.5 rounded-lg'
+            }`}
           >
             {tab}
           </button>

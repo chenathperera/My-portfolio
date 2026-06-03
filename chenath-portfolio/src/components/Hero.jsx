@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Download, ArrowRight } from 'lucide-react';
 import profilePhoto from '../assets/profile.png';
 import bgImage from '../assets/bg.png'; // 👈 Your Gemini desk background image
+
+const SUBTITLE_TEXT = '3rd Year IT Undergraduate';
+
+const CV_GLOW_BASE =
+  '0 0 20px rgba(239,68,68,0.5), 0 0 40px rgba(239,68,68,0.2)';
+const CV_GLOW_HOVER =
+  '0 0 30px rgba(239,68,68,0.75), 0 0 60px rgba(239,68,68,0.35)';
+const TOUCH_GLOW_BASE = '0 0 15px rgba(148,163,184,0.15)';
+const TOUCH_GLOW_HOVER = '0 0 25px rgba(148,163,184,0.35)';
 
 function GitHubIcon({ size = 20 }) {
   return (
@@ -21,6 +30,20 @@ function LinkedInIcon({ size = 20 }) {
 }
 
 export default function Hero() {
+  const [typedSubtitle, setTypedSubtitle] = useState('');
+  const [cvGlowHover, setCvGlowHover] = useState(false);
+  const [touchGlowHover, setTouchGlowHover] = useState(false);
+
+  useEffect(() => {
+    if (typedSubtitle.length >= SUBTITLE_TEXT.length) return;
+
+    const interval = setInterval(() => {
+      setTypedSubtitle((prev) => SUBTITLE_TEXT.slice(0, prev.length + 1));
+    }, 60);
+
+    return () => clearInterval(interval);
+  }, [typedSubtitle]);
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -39,6 +62,28 @@ export default function Hero() {
         backgroundRepeat: 'no-repeat',
       }}
     >
+      <style>{`
+        @keyframes hero-cursor-blink {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        @keyframes hero-orb-drift-y {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-48px); }
+        }
+        @keyframes hero-orb-drift-x {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(40px); }
+        }
+        @keyframes hero-orb-drift-diagonal {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(-36px, 32px); }
+        }
+        .hero-typewriter-cursor {
+          animation: hero-cursor-blink 1s step-end infinite;
+        }
+      `}</style>
+
       {/* ── Overlay layers ── */}
 
       {/* 1. Light base dimmer — only slightly darkens, keeps center visible */}
@@ -95,9 +140,46 @@ export default function Hero() {
       {/* Hero Section */}
       <section
         id="home"
-        className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-32 pb-16 relative z-10"
+        className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-32 pb-16 relative z-10 overflow-hidden"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full max-w-7xl mx-auto">
+        {/* Animated background orbs */}
+        <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
+          <div
+            className="absolute rounded-full blur-[120px]"
+            style={{
+              width: 420,
+              height: 420,
+              top: '-8%',
+              left: '-6%',
+              background: 'rgba(220,38,38,0.15)',
+              animation: 'hero-orb-drift-y 8s ease-in-out infinite alternate',
+            }}
+          />
+          <div
+            className="absolute rounded-full blur-[120px]"
+            style={{
+              width: 360,
+              height: 360,
+              bottom: '5%',
+              right: '-4%',
+              background: 'rgba(180,20,20,0.1)',
+              animation: 'hero-orb-drift-x 10s ease-in-out infinite alternate',
+            }}
+          />
+          <div
+            className="absolute rounded-full blur-[120px]"
+            style={{
+              width: 480,
+              height: 480,
+              top: '20%',
+              right: '10%',
+              background: 'rgba(30,60,120,0.12)',
+              animation: 'hero-orb-drift-diagonal 7s ease-in-out infinite alternate',
+            }}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full max-w-7xl mx-auto relative z-10">
           {/* Left Column */}
           <div className="lg:col-span-7 flex flex-col justify-center order-2 lg:order-1">
             <motion.div
@@ -125,10 +207,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-400 mb-6 tracking-wide"
+              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-400 mb-6 tracking-wide min-h-[1.5em]"
             >
-              3rd Year IT Undergraduate
-              <span className="text-red-500 animate-pulse">|</span>
+              {typedSubtitle}
+              <span className="text-red-500 hero-typewriter-cursor">|</span>
             </motion.h2>
 
             <motion.p
@@ -154,6 +236,9 @@ export default function Hero() {
                 href="/chenath_cv.pdf"
                 download
                 className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow-xl shadow-red-950/40 transition-all duration-300 transform hover:-translate-y-0.5"
+                style={{ boxShadow: cvGlowHover ? CV_GLOW_HOVER : CV_GLOW_BASE }}
+                onMouseEnter={() => setCvGlowHover(true)}
+                onMouseLeave={() => setCvGlowHover(false)}
               >
                 <Download size={18} />
                 <span>Download CV</span>
@@ -162,6 +247,9 @@ export default function Hero() {
               <button
                 onClick={() => scrollToSection('contact')}
                 className="flex items-center gap-2 bg-[#141a24]/80 hover:bg-[#1c2432] text-slate-200 hover:text-white font-semibold px-6 py-3.5 rounded-xl border border-slate-700 hover:border-red-900/40 transition-all duration-300 cursor-pointer group"
+                style={{ boxShadow: touchGlowHover ? TOUCH_GLOW_HOVER : TOUCH_GLOW_BASE }}
+                onMouseEnter={() => setTouchGlowHover(true)}
+                onMouseLeave={() => setTouchGlowHover(false)}
               >
                 <span>Get In Touch</span>
                 <ArrowRight

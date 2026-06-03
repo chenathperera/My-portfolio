@@ -74,7 +74,7 @@ export default function Education() {
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="inline-flex items-center gap-1.5 border border-red-900/40 bg-red-950/20 px-3.5 py-1.5 rounded-full text-red-400 text-xs font-semibold uppercase tracking-wider mb-4"
           >
             Academic Background
@@ -95,7 +95,7 @@ export default function Education() {
               key={idx}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="bg-[#0e141f]/90 border border-slate-800/60 rounded-[24px] p-6 md:p-7 shadow-xl relative flex flex-col justify-between overflow-hidden group hover:border-red-900/30 transition-all duration-300"
             >
@@ -171,7 +171,7 @@ export default function Education() {
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-14 max-w-3xl mx-auto bg-[#0e141f]/60 border border-slate-800/40 rounded-xl p-4 flex items-center justify-center gap-3 shadow-md"
         >

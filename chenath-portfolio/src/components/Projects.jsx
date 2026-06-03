@@ -134,7 +134,7 @@ export default function Projects() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="inline-flex items-center gap-1.5 border border-red-900/30 bg-red-950/20 px-3 py-1 rounded-full text-red-400 text-xs font-semibold uppercase tracking-wider mb-4"
           >
             <FolderGit2 size={12} />

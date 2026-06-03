@@ -85,7 +85,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5 }}
             className="lg:col-span-5 flex flex-col gap-6 rounded-[24px] p-6 md:p-8 shadow-xl"
             style={{ backgroundColor: '#131e2e', border: '1px solid rgba(148,163,184,0.1)' }}
@@ -175,7 +175,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5 }}
             className="lg:col-span-7 rounded-[24px] p-6 md:p-8 shadow-xl"
             style={{ backgroundColor: '#131e2e', border: '1px solid rgba(148,163,184,0.1)' }}

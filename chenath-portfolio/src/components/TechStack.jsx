@@ -51,7 +51,7 @@ export default function TechStack() {
           <motion.h2 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5 }}
             className="text-4xl md:text-5xl font-extrabold text-white tracking-tight"
           >
@@ -61,7 +61,7 @@ export default function TechStack() {
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-slate-400 text-sm md:text-base mt-3 max-w-xl mx-auto font-normal"
           >
@@ -76,7 +76,7 @@ export default function TechStack() {
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
               className="bg-[#101620]/40 border border-slate-800/60 p-6 rounded-[20px] flex flex-col items-center text-center shadow-md hover:border-red-900/30 hover:bg-[#141d2a]/50 transition-all duration-300 group"
             >
@@ -110,7 +110,7 @@ export default function TechStack() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-wrap justify-center items-center gap-4 mt-16"
         >
