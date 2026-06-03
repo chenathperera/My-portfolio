@@ -11,6 +11,7 @@ function App() {
   return (
     <>
     <Navbar />
+      <div className="overflow-x-hidden w-full">
       <Hero />
       <About />
       <TechStack />
@@ -18,6 +19,7 @@ function App() {
       <Education />
       <Contact />
       <Footer />
+    </div>
     </>
   );
 }
