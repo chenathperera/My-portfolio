@@ -92,49 +92,6 @@ export default function Hero() {
         }}
       />
 
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0d1420]/80 backdrop-blur-xl border-b border-slate-900/60 px-6 py-4 md:px-16 lg:px-24 flex justify-between items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-xl font-bold tracking-wide text-red-500 cursor-pointer hover:text-red-400 transition-colors"
-          onClick={() => scrollToSection('home')}
-        >
-          Chenath Perera
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400"
-        >
-          {['home', 'about', 'projects', 'education', 'contact'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => scrollToSection(tab)}
-              className="capitalize hover:text-red-500 transition-colors cursor-pointer duration-300 relative group"
-            >
-              {tab}
-              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-full"></span>
-            </button>
-          ))}
-        </motion.div>
-
-        <motion.a
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          href="/chenath_cv.pdf"
-          download
-          className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-red-950/50 transition-all duration-300"
-        >
-          <Download size={16} />
-          <span>CV</span>
-        </motion.a>
-      </nav>
-
       {/* Hero Section */}
       <section
         id="home"
