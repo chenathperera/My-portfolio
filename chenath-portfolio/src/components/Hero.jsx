@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { Mail, Download, ArrowRight } from 'lucide-react';
 import profilePhoto from '../assets/profile.png';
 import bgImage from '../assets/bg.png';
 
 const SUBTITLE_TEXT = '3rd Year IT Undergraduate';
-
 const CV_GLOW_BASE   = '0 0 20px rgba(239,68,68,0.5), 0 0 40px rgba(239,68,68,0.2)';
 const CV_GLOW_HOVER  = '0 0 30px rgba(239,68,68,0.75), 0 0 60px rgba(239,68,68,0.35)';
 const TOUCH_GLOW_BASE  = '0 0 15px rgba(148,163,184,0.15)';
@@ -29,16 +28,43 @@ function LinkedInIcon({ size = 22 }) {
 
 export default function Hero() {
   const [typedSubtitle, setTypedSubtitle] = useState('');
-  const [cvGlowHover, setCvGlowHover] = useState(false);
+  const [isVisible, setIsVisible]         = useState(false);
+  const [cvGlowHover, setCvGlowHover]     = useState(false);
   const [touchGlowHover, setTouchGlowHover] = useState(false);
+  const sectionRef = useRef(null);
+  const controls   = useAnimation();
+  const typingRef  = useRef(null);
 
+  // ── Restart everything when hero enters viewport ──
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Reset & replay framer-motion animations
+          controls.set({ opacity: 0, y: 20 });
+          controls.start({ opacity: 1, y: 0, transition: { duration: 0.5 } });
+          // Reset & restart typing
+          setTypedSubtitle('');
+        } else {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [controls]);
+
+  // ── Typing animation — reruns when typedSubtitle resets to '' ──
+  useEffect(() => {
+    if (!isVisible) return;
     if (typedSubtitle.length >= SUBTITLE_TEXT.length) return;
-    const interval = setInterval(() => {
+    typingRef.current = setInterval(() => {
       setTypedSubtitle((prev) => SUBTITLE_TEXT.slice(0, prev.length + 1));
     }, 60);
-    return () => clearInterval(interval);
-  }, [typedSubtitle]);
+    return () => clearInterval(typingRef.current);
+  }, [typedSubtitle, isVisible]);
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -47,6 +73,7 @@ export default function Hero() {
 
   return (
     <div
+      ref={sectionRef}
       className="min-h-screen text-slate-100 font-sans selection:bg-red-500 selection:text-white relative overflow-x-hidden"
       style={{
         backgroundColor: '#0d1420',
@@ -101,9 +128,10 @@ export default function Hero() {
 
           {/* Left Column */}
           <div className="lg:col-span-7 flex flex-col justify-center order-2 lg:order-1">
+
             <motion.div
+              animate={controls}
               initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="flex items-center gap-2 text-red-500 text-xs md:text-sm font-bold tracking-widest uppercase mb-4"
             >
@@ -112,8 +140,8 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1
+              animate={controls}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-4 text-white"
             >
@@ -123,8 +151,8 @@ export default function Hero() {
             </motion.h1>
 
             <motion.h2
+              animate={controls}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-xl md:text-2xl lg:text-3xl font-bold text-red-400 mb-6 tracking-wide min-h-[1.5em]"
             >
@@ -133,8 +161,8 @@ export default function Hero() {
             </motion.h2>
 
             <motion.p
+              animate={controls}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               className="text-slate-200 text-base md:text-lg max-w-xl leading-relaxed mb-8 font-normal"
             >
@@ -145,8 +173,8 @@ export default function Hero() {
 
             {/* Action Buttons */}
             <motion.div
+              animate={controls}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex flex-wrap items-center gap-4 mb-10"
             >
@@ -174,81 +202,36 @@ export default function Hero() {
               </button>
             </motion.div>
 
-            {/* ── Social Icons — colored + larger ── */}
+            {/* Social Icons */}
             <motion.div
+              animate={controls}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.7 }}
               className="flex items-center gap-4"
             >
-              {/* GitHub — slate/white */}
-              <a
-                href="https://github.com/chenathperera"
-                target="_blank"
-                rel="noreferrer"
-                className="p-4 rounded-xl transition-all duration-300 border hover:scale-110 hover:-translate-y-0.5"
-                style={{
-                  background: 'rgba(148,163,184,0.1)',
-                  border: '1px solid rgba(148,163,184,0.2)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(148,163,184,0.22)';
-                  e.currentTarget.style.borderColor = 'rgba(148,163,184,0.45)';
-                  e.currentTarget.style.boxShadow = '0 0 18px rgba(148,163,184,0.25)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(148,163,184,0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+              <a href="https://github.com/chenathperera" target="_blank" rel="noreferrer"
+                className="p-4 rounded-xl transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
+                style={{ background: 'rgba(148,163,184,0.1)', border: '1px solid rgba(148,163,184,0.2)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(148,163,184,0.22)'; e.currentTarget.style.borderColor = 'rgba(148,163,184,0.45)'; e.currentTarget.style.boxShadow = '0 0 18px rgba(148,163,184,0.25)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(148,163,184,0.1)'; e.currentTarget.style.borderColor = 'rgba(148,163,184,0.2)'; e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <GitHubIcon size={22} />
               </a>
 
-              {/* LinkedIn — blue */}
-              <a
-                href="https://www.linkedin.com/in/chenath-perera-83bba0337/"
-                target="_blank"
-                rel="noreferrer"
+              <a href="https://www.linkedin.com/in/chenath-perera-83bba0337/" target="_blank" rel="noreferrer"
                 className="p-4 rounded-xl transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
-                style={{
-                  background: 'rgba(59,130,246,0.12)',
-                  border: '1px solid rgba(59,130,246,0.25)',
-                  color: '#60a5fa',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(59,130,246,0.25)';
-                  e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 18px rgba(59,130,246,0.3)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(59,130,246,0.12)';
-                  e.currentTarget.style.borderColor = 'rgba(59,130,246,0.25)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.25)'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)'; e.currentTarget.style.boxShadow = '0 0 18px rgba(59,130,246,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.12)'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.25)'; e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <LinkedInIcon size={22} />
               </a>
 
-              {/* Gmail — red */}
-              <a
-                href="mailto:chenathperera@gmail.com"
+              <a href="mailto:chenathperera@gmail.com"
                 className="p-4 rounded-xl transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
-                style={{
-                  background: 'rgba(239,68,68,0.12)',
-                  border: '1px solid rgba(239,68,68,0.25)',
-                  color: '#f87171',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(239,68,68,0.25)';
-                  e.currentTarget.style.borderColor = 'rgba(239,68,68,0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 18px rgba(239,68,68,0.3)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(239,68,68,0.12)';
-                  e.currentTarget.style.borderColor = 'rgba(239,68,68,0.25)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', color: '#f87171' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.25)'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.5)'; e.currentTarget.style.boxShadow = '0 0 18px rgba(239,68,68,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.12)'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.25)'; e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <Mail size={22} />
               </a>
@@ -258,8 +241,8 @@ export default function Hero() {
           {/* Right Column - Profile Photo */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2">
             <motion.div
+              animate={controls}
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               className="relative w-80 h-[420px] sm:w-[380px] sm:h-[480px] md:w-[440px] md:h-[560px]"
             >
