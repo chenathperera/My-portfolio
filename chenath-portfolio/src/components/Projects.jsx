@@ -85,7 +85,7 @@ export default function Projects() {
         { icon: <Terminal size={14} />, text: "Stable Diffusion Hooks" },
         { icon: <Layers size={14} />, text: "Credit-based Gateways" }
       ],
-      github: "https://github.com/chenathperera/PairPix"
+      github: "https://github.com/chenathperera/AI-Image-Generator"
     },
     {
       title: "Virtual Try-On System",

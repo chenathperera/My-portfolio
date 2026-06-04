@@ -24,7 +24,7 @@ export default function About() {
 
   const stats = [
     { num: "5+", label: "Projects Completed", sub: "Web Applications" },
-    { num: "7+", label: "Technologies", sub: "Mastered" },
+    { num: "7+", label: "Technologies", sub: "" },
     { num: "3rd", label: "Year Student", sub: "SLIIT" },
     { num: "BSc", label: "IT Degree", sub: "Software Engineering" }
   ];
