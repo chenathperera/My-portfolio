@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
 
 const SECTION_IDS = ['home', 'about', 'projects', 'education', 'contact'];
+// Add 'tech' to observed sections to ensure smooth transitions, mapping it to 'about'
+const OBSERVED_IDS = ['home', 'about', 'tech', 'projects', 'education', 'contact'];
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home');
@@ -17,24 +19,28 @@ export default function Navbar() {
         });
 
         let bestSection = null;
-        let bestRatio = 0;
 
-        SECTION_IDS.forEach((id) => {
+        OBSERVED_IDS.forEach((id) => {
           const ratio = visibility.get(id) ?? 0;
-          if (ratio >= 0.5 && ratio > bestRatio) {
-            bestRatio = ratio;
+          if (ratio >= 0.05) {
             bestSection = id;
           }
         });
 
         if (bestSection) {
-          setActiveSection(bestSection);
+          // If we're in the tech stack, keep 'about' active
+          setActiveSection(bestSection === 'tech' ? 'about' : bestSection);
         }
       },
-      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+      { 
+        // Using a slightly lower internal threshold to ensure tall sections trigger
+        // even if they can't fill 10% of the constrained viewport area
+        threshold: [0, 0.05, 0.1], 
+        rootMargin: '-80px 0px -40% 0px' 
+      }
     );
 
-    SECTION_IDS.forEach((id) => {
+    OBSERVED_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
